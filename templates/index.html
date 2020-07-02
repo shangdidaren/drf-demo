@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    {% csrf_token %}
+    <button id="qw" onclick="kk();">button</button>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+
+    function kk() {
+        $.ajax({
+            url: 'http://127.0.0.1:8000/session/',
+            type: 'post',
+
+            data: {'k1':'v1','csrfmiddlewaretoken':csrf},
+
+        });
+    }
+
+
+</script>
