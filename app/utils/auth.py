@@ -1,6 +1,28 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+
 from app.models import UserInfo
+import jwt
+from django.conf import settings
+from jwt import exceptions
+from rest_framework.exceptions import AuthenticationFailed
+class JWT_authentication(BaseAuthentication):
+    def authenticate(self,request):
+        token = request.data['token']
+        salt = settings.SECRET_KEY
+        payload = None
+        msg = None
+        try:
+            payload = jwt.decode(token,salt,True)  # True表示认证，返回值是payload
+        except exceptions.ExpiredSignature:
+            raise AuthenticationFailed({'code':40002,'error':'token失效'})
+        except jwt.DecodeError:
+            raise AuthenticationFailed({'code':40003,'error':'token认真失败'})
+        except jwt.InvalidTokenError:
+            raise AuthenticationFailed({'code':40004},'error':'非法的token')
+        if not payload:
+            return (payload,token)
+
 
 
 class My_authentication(BaseAuthentication):
